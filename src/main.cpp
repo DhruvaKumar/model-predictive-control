@@ -94,10 +94,21 @@ int main() {
 
           /*
           * TODO: Calculate steering angle and throttle using MPC.
-       s   *
+          *
           * Both are in between [-1, 1].
           *
           */
+
+          // tranform reference trajectory waypoints from global coordinate to
+          // vehicle coordinate system (rotate anticlockwise by 90deg)
+          for (int i = 0; i<ptsx.size(); ++i)
+          {
+            auto xdiff = ptsx[i] - px;
+            auto ydiff = ptsy[i] - py;
+
+            ptsx[i] = xdiff * cos(psi) + ydiff * sin(psi);
+            ptsy[i] = ydiff * cos(psi) - xdiff * sin(psi);
+          }
 
           // calculate coeffs of reference trajectory polynomial
           Eigen::Map<Eigen::VectorXd> ptsxeig(&ptsx[0], ptsx.size());
@@ -105,16 +116,16 @@ int main() {
           auto coeffs = polyfit(ptsxeig, ptsyeig, 3);
 
           // calculate the cross track error
-          double cte = polyeval(coeffs, px) - py;
+          double cte = polyeval(coeffs, 0);
           // calculate the orientation error
           // f(x) is the polynomial defining the reference trajectory
           // f'(x) = 3Ax^2 + 2Bx + C
           double f_prime_x = 3*coeffs[3]*pow(px,2) + 2*coeffs[2]*px + coeffs[1]; 
-          double epsi = psi - atan(f_prime_x);
+          double epsi = -atan(f_prime_x);
 
           // state
           Eigen::VectorXd state(6);
-          state << px, py, psi, v, cte, epsi;
+          state << 0, 0, 0, v, cte, epsi;
 
           // solve mpc for state and reference trajectory
           // returns [steering_angle, acceleration]
