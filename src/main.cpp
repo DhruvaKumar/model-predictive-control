@@ -130,13 +130,13 @@ int main() {
 
           // solve mpc for state and reference trajectory
           // returns [steering_angle, acceleration]
-          // auto actuations = mpc.Solve(state, coeffs);
+          auto actuations = mpc.Solve(state, coeffs);
 
-          // double steer_value = actuations[0]/deg2rad(25); // normalize between [-1,1]
-          // double throttle_value = actuations[1];
+          double steer_value = actuations[0]/deg2rad(25); // normalize between [-1,1]
+          double throttle_value = actuations[1];
 
-          double steer_value = 0.0;
-          double throttle_value = 0.1;
+          // double steer_value = 0.0;
+          // double throttle_value = 0.1;
 
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
