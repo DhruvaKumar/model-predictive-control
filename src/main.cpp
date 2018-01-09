@@ -4,6 +4,7 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+#include <algorithm>
 #include "Eigen-3.3/Eigen/Core"
 #include "Eigen-3.3/Eigen/QR"
 #include "MPC.h"
@@ -101,7 +102,7 @@ int main() {
 
           // tranform reference trajectory waypoints from global coordinate to
           // vehicle coordinate system (rotate anticlockwise by 90deg)
-          for (int i = 0; i<ptsx.size(); ++i)
+          for (int i = 0; i < (int)ptsx.size(); ++i)
           {
             auto xdiff = ptsx[i] - px;
             auto ydiff = ptsy[i] - py;
@@ -129,10 +130,13 @@ int main() {
 
           // solve mpc for state and reference trajectory
           // returns [steering_angle, acceleration]
-          auto actuations = mpc.Solve(state, coeffs);
+          // auto actuations = mpc.Solve(state, coeffs);
 
-          double steer_value = actuations[0]/deg2rad(25); // normalize between [-1,1]
-          double throttle_value = actuations[1];
+          // double steer_value = actuations[0]/deg2rad(25); // normalize between [-1,1]
+          // double throttle_value = actuations[1];
+
+          double steer_value = 0.0;
+          double throttle_value = 0.1;
 
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
@@ -148,13 +152,18 @@ int main() {
           msgJson["mpc_y"] = mpc.y_pred_vals;
 
           //Display the waypoints/reference line
-          vector<double> next_x_vals = ptsx;
-          vector<double> next_y_vals = ptxy;
-
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Yellow line
-
-          msgJson["next_x"] = next_x_vals;
+          vector<double> next_x_vals;
+          vector<double> next_y_vals;
+          int n_waypoints = 25;
+          int step = 2.5;
+          for (int i = 1; i<n_waypoints; ++i)
+          {
+            next_x_vals.push_back(step*i);
+            next_y_vals.push_back(polyeval(coeffs, step*i));
+          }
+          msgJson["next_x"] = next_x_vals; 
           msgJson["next_y"] = next_y_vals;
 
 
@@ -169,7 +178,7 @@ int main() {
           //
           // NOTE: REMEMBER TO SET THIS TO 100 MILLISECONDS BEFORE
           // SUBMITTING.
-          this_thread::sleep_for(chrono::milliseconds(100));
+          // this_thread::sleep_for(chrono::milliseconds(100));
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
         }
       } else {
