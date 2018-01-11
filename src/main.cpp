@@ -92,13 +92,26 @@ int main() {
           double py = j[1]["y"];
           double psi = j[1]["psi"];
           double v = j[1]["speed"];
+          double delta = j[1]["steering_angle"];
+          double acceleration = j[1]["throttle"];
 
           /*
-          * TODO: Calculate steering angle and throttle using MPC.
+          * Calculate steering angle and throttle using MPC.
           *
           * Both are in between [-1, 1].
           *
           */
+
+          // account for 100ms latency
+          // now the initial state becomes the state after 100ms
+          // during this period, use the previous actuation
+          double latency = 0.1; // 100 ms
+          const double Lf = 2.67;
+          px = px + (v)*cos(psi)*latency;
+          py = py + (v)*sin(psi)*latency;
+          psi = psi - v/Lf*delta*latency;
+          v = v + acceleration*latency;
+
 
           // tranform reference trajectory waypoints from global coordinate to
           // vehicle coordinate system (rotate anticlockwise by 90deg)
@@ -135,12 +148,7 @@ int main() {
           double steer_value = actuations[0]/deg2rad(25); // normalize between [-1,1]
           double throttle_value = actuations[1];
 
-          // double steer_value = 0.0;
-          // double throttle_value = 0.1;
-
           json msgJson;
-          // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
-          // Otherwise the values will be in between [-deg2rad(25), deg2rad(25] instead of [-1, 1].
           msgJson["steering_angle"] = steer_value;
           msgJson["throttle"] = throttle_value;
 
@@ -178,7 +186,7 @@ int main() {
           //
           // NOTE: REMEMBER TO SET THIS TO 100 MILLISECONDS BEFORE
           // SUBMITTING.
-          // this_thread::sleep_for(chrono::milliseconds(100));
+          this_thread::sleep_for(chrono::milliseconds(100));
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
         }
       } else {
