@@ -23,7 +23,6 @@ This project was done as a part of Udacity's Self-Driving Car Engineer Nanodegre
 3. Run it: `./mpc`.
 
 ## Implementation
----
 ### Model
 
 The MPC uses a simple kinematic bicycle model: 
@@ -39,12 +38,14 @@ epsi[t] = psi[t-1] - psides[t-1] + v[t-1]/Lf*delta[t-1]*dt
 ```
 
 State: `[x, y, psi, v, cte, epsi]`
+
 `x, y, psi`: vehicle's 2d pose (position, yaw)
 `v`: velocity
 `cte`: cross track error (distance between vehicle's position and reference trajectory)
 `epsi`: orientation error (angle between vehicle's orientation and reference trajectory's orientation)
 
 Actuator inputs: `[delta, a]`
+
 `delta`: steering angle
 `a`: acceleration/throttle
 
@@ -67,7 +68,7 @@ The weights of these terms in the cost function was manually tuned.
 At every time step, for the given state and reference waypoints, the objective is to find the actuator inputs that result in a predicted trajectory over a time horizon which minimizes the cost function.
 
 ### Time horizon
-A time horizon `T=1s` with `N=10` and `dt=0.1` was used. These values were suggested in the forums. Other values for `N` from 5-20 and dt from 0.1 to 0.3 were tried but didn't work well.
+A time horizon of `T=1s` with `N=10` and `dt=0.1` was used. These values were suggested in the forums. Other values for `N` from 5-20 and dt from 0.1 to 0.3 were tried but didn't work well.
 
 ### Polymonimal fitting and preprocessing
 The reference waypoints are transformed from the global coordinate system to the vehicle's coordinate system. This results in the pose being at the origin. `x,y,psi=0`. A 3rd degree polynomial reference trajectory is computed from the transformed waypoints.
