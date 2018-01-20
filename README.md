@@ -40,14 +40,19 @@ epsi[t] = psi[t-1] - psides[t-1] + v[t-1]/Lf*delta[t-1]*dt
 State: `[x, y, psi, v, cte, epsi]`
 
 `x, y, psi`: vehicle's 2d pose (position, yaw)
+
 `v`: velocity
+
 `cte`: cross track error (distance between vehicle's position and reference trajectory)
+
 `epsi`: orientation error (angle between vehicle's orientation and reference trajectory's orientation)
 
 Actuator inputs: `[delta, a]`
 
 `delta`: steering angle
+
 `a`: acceleration/throttle
+
 
 `Lf` is the distance between the front of the vehicle and the center of gravity
 
