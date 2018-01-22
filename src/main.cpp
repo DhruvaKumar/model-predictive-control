@@ -134,7 +134,8 @@ int main() {
           // calculate the orientation error
           // f(x) is the polynomial defining the reference trajectory
           // f'(x) = 3Ax^2 + 2Bx + C
-          double f_prime_x = 3*coeffs[3]*pow(px,2) + 2*coeffs[2]*px + coeffs[1]; 
+          // double f_prime_x = 3*coeffs[3]*pow(px,2) + 2*coeffs[2]*px + coeffs[1]; 
+          double f_prime_x = coeffs[1]; 
           double epsi = -atan(f_prime_x);
 
           // state

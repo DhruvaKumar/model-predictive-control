@@ -73,7 +73,7 @@ The weights of these terms in the cost function was manually tuned.
 At every time step, for the given state and reference waypoints, the objective is to find the actuator inputs that result in a predicted trajectory over a time horizon which minimizes the cost function.
 
 ### Time horizon
-A time horizon of `T=1s` with `N=10` and `dt=0.1` was used. These values were suggested in the forums. Other values for `N` from 5-20 and dt from 0.1 to 0.3 were tried but didn't work well.
+A time horizon of `T=1s` with `N=10` and `dt=0.1` was used as suggested. Other values for `N` from 5-20 and dt from 0.1 to 0.3 were tried but didn't work well. More time steps `N` would allow the model to find potentially better actuator values than a shorter time horizon since it's looking further into the future. However, this adds in computational cost and in some scenarios, it's not worth looking so far into the future when the actual state might differ from the predicted trajectory. Lower values of `dt` would provide finer resolution between the predicted states and therefore the predicted trajectory. Keeping these tradeoffs in mind, the goal would be to maximize `T` and minimize `dt`.
 
 ### Polymonimal fitting and preprocessing
 The reference waypoints are transformed from the global coordinate system to the vehicle's coordinate system. This results in the pose being at the origin. `x,y,psi=0`. A 3rd degree polynomial reference trajectory is computed from the transformed waypoints.

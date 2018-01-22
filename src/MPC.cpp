@@ -20,7 +20,9 @@ double dt = 0.1;
 //
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
-double ref_v = 75;
+const double ref_v = 75;
+const double ref_cte = 0;
+const double ref_epsi = 0;
 
 // The solver takes all the state variables and actuator
 // variables in a singular vector. Thus, we should to establish
@@ -58,23 +60,23 @@ class FG_eval
     // 3. diff bw v and ref_v
     for (int t = 0; t < N; t++) 
     {
-      fg[0] += 2500*CppAD::pow(vars[cte_start + t], 2); //CppAD::exp(-t*0.1)*
-      fg[0] += 2500*CppAD::pow(vars[epsi_start + t], 2);
+      fg[0] += 100*CppAD::pow(vars[cte_start + t] - ref_cte, 2); //CppAD::exp(-t*0.1)*
+      fg[0] += 100*CppAD::pow(vars[epsi_start + t] - ref_epsi, 2);
       fg[0] += CppAD::pow(vars[v_start + t] - ref_v, 2);
     }
 
     // Minimize the use of actuators
     for (int t = 0; t < N - 1; t++) 
     {
-      fg[0] += 50*CppAD::pow(vars[delta_start + t], 2);
-      fg[0] += 50*CppAD::pow(vars[a_start + t], 2);
+      fg[0] += 10*CppAD::pow(vars[delta_start + t], 2);
+      fg[0] += 10*CppAD::pow(vars[a_start + t], 2);
     }
 
     // Minimize the value gap between sequential actuations.
     for (int t = 0; t < N - 2; t++) 
     {
-      fg[0] += 300*CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
-      fg[0] += 30*CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
+      fg[0] += 130000*CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
+      fg[0] += 100*CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
     }
 
     // -----------------------  model constraints
@@ -122,6 +124,7 @@ class FG_eval
       // v_[t] = v[t-1] + a[t-1] * dt
       // cte[t] = f(x[t-1]) - y[t-1] + v[t-1] * sin(epsi[t-1]) * dt
       // epsi[t] = psi[t] - psides[t-1] + v[t-1] * delta[t-1] / Lf * dt
+      
       fg[1 + x_start + t] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
       fg[1 + y_start + t] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
       fg[1 + psi_start + t] = psi1 - (psi0 - v0 * delta0 / Lf * dt);
@@ -129,7 +132,7 @@ class FG_eval
       fg[1 + cte_start + t] =
           cte1 - ((f0 - y0) + (v0 * CppAD::sin(epsi0) * dt));
       fg[1 + epsi_start + t] =
-          epsi1 - ((psi0 - psides0) + v0 * delta0 / Lf * dt);
+          epsi1 - ((psi0 - psides0) - v0 * delta0 / Lf * dt);
     }
   }
 };
