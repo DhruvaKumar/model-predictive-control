@@ -80,16 +80,21 @@ The reference waypoints are transformed from the global coordinate system to the
 
 ![alt text](./results/mpc_trj.gif)
 
+The yellow line is the reference trajectory. The green line is the predicted trajectory.
+
 ### Latency
 To simulate the real world latency between when an actuator command is given and when the vehicle is actuated, a 100ms latency is simulated. This is handled in the MPC by advancing the initial state of the predicted trajectory by 100 ms. The rest of the prediction follows from this delayed state.
 
 
 ## Result
 
-[Final video](./results/mpc.mp4)
+Final video
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=2XHFJSA1Oz0
+" target="_blank"><img src="http://img.youtube.com/vi/2XHFJSA1Oz0/0.jpg" 
+alt="mpc" width="320" height="220" border="10" /></a>
 
-Final video with reference and predicted trajectories
 
+Final video with reference (yellow) and predicted (green) trajectories
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=hj0-zy3l8v8
 " target="_blank"><img src="http://img.youtube.com/vi/hj0-zy3l8v8/0.jpg" 
 alt="mpc" width="320" height="220" border="10" /></a>
