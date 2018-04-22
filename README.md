@@ -88,13 +88,6 @@ To simulate the real world latency between when an actuator command is given and
 
 ## Result
 
-Final video
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=2XHFJSA1Oz0
-" target="_blank"><img src="http://img.youtube.com/vi/2XHFJSA1Oz0/0.jpg" 
-alt="mpc" width="320" height="220" border="10" /></a>
-
-
-Final video with reference (yellow) and predicted (green) trajectories
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=hj0-zy3l8v8
 " target="_blank"><img src="http://img.youtube.com/vi/hj0-zy3l8v8/0.jpg" 
 alt="mpc" width="320" height="220" border="10" /></a>
