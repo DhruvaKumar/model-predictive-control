@@ -88,5 +88,9 @@ To simulate the real world latency between when an actuator command is given and
 
 [Final video](./results/mpc.mp4)
 
-[Final video with reference and predicted trajectories](./results/mpc_trj.mp4)
+Final video with reference and predicted trajectories
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=hj0-zy3l8v8
+" target="_blank"><img src="http://img.youtube.com/vi/hj0-zy3l8v8/0.jpg" 
+alt="mpc" width="320" height="220" border="10" /></a>
 
